@@ -15,7 +15,7 @@ def get_response(client_connection):
             return 'HTTP/1.0 400 BAD REQUEST\n\n 400: Bad Request'
 
         #print(start_time, end_time, end_time-start_time)
-    except TimeoutError:
+    except:
         return 'HTTP/1.0 400 BAD REQUEST\n\n 400: Bad Request'
 
     if end_time - start_time > 1:
@@ -45,5 +45,6 @@ while True:
     response = get_response(client_connection)
     client_connection.sendall(response.encode())
     client_connection.close()
+
 
 server_socket.close()
