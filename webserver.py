@@ -33,14 +33,9 @@ def is_modified_since(headers, filepath):
     return False
 
 
-def print_the_headers(headers, isValidFile, filename=None, filepath=None):
-    if isValidFile:
-        # headers.insert(3,"Last-Modified: " + trackModifiedTime[filename])
-        for info in headers:
-            print(info)
-    else:
-        for info in headers:
-            print(info)
+def print_headers(headers):
+    for info in headers:
+        print(info)
 
 
 def get_response(client_connection):
@@ -59,6 +54,7 @@ def get_response(client_connection):
         return NETWORK_CODES["408"]
     else:
         headers = request.split('\n')
+        print_headers(headers)
         filename = headers[0].split()[1]
 
         if filename == '/':
@@ -68,7 +64,6 @@ def get_response(client_connection):
             fin = open(filepath)
             content = fin.read()
             fin.close()
-            print_the_headers(headers, True, filename[1:], filepath)
             is_modified = is_modified_since(headers, filepath)
             if is_modified:
                 return NETWORK_CODES["304"] + request[14:]
@@ -76,10 +71,8 @@ def get_response(client_connection):
                 return NETWORK_CODES["200"] + content
 
         except FileNotFoundError:
-            print_the_headers(headers, False)
             return NETWORK_CODES["404"]
         except:
-            print_the_headers(headers, False)
             return NETWORK_CODES["400"]
 
 
