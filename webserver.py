@@ -1,25 +1,27 @@
 from socket import *
-import os.path, time 
+import os.path, time
 
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 8080
 
 NETWORK_CODES = {
-  "200": 'HTTP/1.0 200 OK\n\n',
-  "304": 'HTTP/1.0 304 NOT MODIFIED',
-  "400": 'HTTP/1.0 400 BAD REQUEST\n\n 400: Bad Request',
-  "404": 'HTTP/1.0 404 NOT FOUND\n\n 404: File Not Found',
-  "408": 'HTTP/1.0 408 REQUEST TIMED OUT\n\n 408: Request Timed Out' 
+    "200": 'HTTP/1.0 200 OK\n\n',
+    "304": 'HTTP/1.0 304 NOT MODIFIED',
+    "400": 'HTTP/1.0 400 BAD REQUEST\n\n 400: Bad Request',
+    "404": 'HTTP/1.0 404 NOT FOUND\n\n 404: File Not Found',
+    "408": 'HTTP/1.0 408 REQUEST TIMED OUT\n\n 408: Request Timed Out'
 }
 
-def startServer(server_socket, SERVER_HOST, SERVER_PORT):
+
+def start_server():
     server_socket = socket(AF_INET, SOCK_STREAM)
     server_socket.bind((SERVER_HOST, SERVER_PORT))
     server_socket.listen(1)
     print('Listening on port %s ...' % SERVER_PORT)
     return server_socket
 
-def isModifiedSince(headers, filepath):
+
+def is_modified_since(headers, filepath):
     for line in headers:
         if "If-Modified-Since:" in line:
             modified_time = time.strptime(line[19:48], '%a, %d %b %Y %H:%M:%S %Z')
@@ -30,8 +32,9 @@ def isModifiedSince(headers, filepath):
                 return False
     return False
 
-def printTheHeaders(headers, isValidFile, filename=None, filepath=None):
-    if(isValidFile):
+
+def print_the_headers(headers, isValidFile, filename=None, filepath=None):
+    if isValidFile:
         # headers.insert(3,"Last-Modified: " + trackModifiedTime[filename])
         for info in headers:
             print(info)
@@ -39,13 +42,14 @@ def printTheHeaders(headers, isValidFile, filename=None, filepath=None):
         for info in headers:
             print(info)
 
+
 def get_response(client_connection):
     try:
         start_time = time.time()
         request = client_connection.recv(1024).decode()
         end_time = time.time()
 
-        if(request[0:3] != 'GET'):
+        if request[0:3] != 'GET':
             return NETWORK_CODES["400"]
 
     except:
@@ -64,19 +68,20 @@ def get_response(client_connection):
             fin = open(filepath)
             content = fin.read()
             fin.close()
-            printTheHeaders(headers, True, filename[1:], filepath)
-            is_modified = isModifiedSince(headers, filepath)
+            print_the_headers(headers, True, filename[1:], filepath)
+            is_modified = is_modified_since(headers, filepath)
             if is_modified:
                 return NETWORK_CODES["304"] + request[14:]
             else:
                 return NETWORK_CODES["200"] + content
-            
+
         except FileNotFoundError:
-            printTheHeaders(headers, False)
+            print_the_headers(headers, False)
             return NETWORK_CODES["404"]
         except:
-            printTheHeaders(headers, False)
+            print_the_headers(headers, False)
             return NETWORK_CODES["400"]
+
 
 def listening(server_socket):
     while True:
@@ -85,19 +90,21 @@ def listening(server_socket):
         client_connection.sendall(response.encode())
         client_connection.close()
 
-def closeServer(server_socket):
+
+def close_server(server_socket):
     server_socket.close()
+
 
 def main():
     # Start the Server
-    server_socket = socket(AF_INET, SOCK_STREAM)
-    server_socket = startServer(server_socket, SERVER_HOST, SERVER_PORT)
+    server_socket = start_server()
 
     # Listen to the Client
     listening(server_socket)
 
     # Close the Server
-    closeServer(server_socket)
+    close_server(server_socket)
+
 
 if __name__ == "__main__":
     main()
