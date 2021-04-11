@@ -1,5 +1,6 @@
 from socket import *
-import os.path, time
+import os.path
+import time
 
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 8080
@@ -66,7 +67,8 @@ def get_response(client_connection):
             fin.close()
             is_modified = is_modified_since(headers, filepath)
             if is_modified:
-                return NETWORK_CODES["304"] + request[14:]
+                date_string = time.strftime('%a, %d %b %Y %H:%M:%S %Z', time.localtime())
+                return NETWORK_CODES["304"] + "\r\nDate: " + date_string + "\r\n\r\n"
             else:
                 return NETWORK_CODES["200"] + content
 
