@@ -27,11 +27,11 @@ def is_modified_since(headers, filepath):
         if "If-Modified-Since:" in line:
             modified_time = time.strptime(line[19:48], '%a, %d %b %Y %H:%M:%S %Z')
             file_time = time.localtime(os.path.getmtime(filepath))
-            if modified_time > file_time:
-                return True
-            else:
+            if modified_time >= file_time:
                 return False
-    return False
+            else:
+                return True
+    return True
 
 
 def print_headers(headers):
@@ -66,7 +66,7 @@ def get_response(client_connection):
             content = fin.read()
             fin.close()
             is_modified = is_modified_since(headers, filepath)
-            if is_modified:
+            if not is_modified:
                 date_string = time.strftime('%a, %d %b %Y %H:%M:%S %Z', time.localtime())
                 return NETWORK_CODES["304"] + "\r\nDate: " + date_string + "\r\n\r\n"
             else:
