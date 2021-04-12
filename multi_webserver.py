@@ -84,14 +84,17 @@ def newTCPServerThread(connection_socket):
     response = get_response(connection_socket);
     connection_socket.sendall(response.encode())
     connection_socket.close()
+    #time.sleep(1000000)  # Uncomment to check if multithreading is working properly
 
 
 def listening(server_socket):
     while True:
         client_connection, client_address = server_socket.accept()
+        #print("The new connection was made from: ", client_connection.getpeername())             # Uncomment to check if multithreading is working properly
         newThread = threading.Thread(target=newTCPServerThread, args=[client_connection,])
         newThread.start()
         THREADS.append(newThread)
+        #print("The number of threads active is: ", threading.active_count())                     # Uncomment to check if multithreading is working properly
 
 
 def close_server(server_socket):
