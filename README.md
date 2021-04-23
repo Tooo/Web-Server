@@ -48,11 +48,15 @@ python3 multi_webserver.py
 
 ## Testing
 ### Multi-Thread Web-Server
-1. Run multi_webserver.py
+1. Install python package requests.
+```bash
+pip install requests
+```   
+2. Run multi_webserver.py
 ```bash
 python3 multi_webserver.py
 ```
-2. Run test_multithreaded.py located in the tests directory
+3. Run test_multithreaded.py located in the tests directory
 ```bash
 python3 test_multithreaded.py
 ```
