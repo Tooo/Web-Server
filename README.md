@@ -5,34 +5,38 @@ A multi-threaded web server is also avaliable to handle multiple requests simult
 
 ## Installation
 1. Download and install [Python 3.9.](https://www.python.org/downloads/release/python-392/)
+2. Git clone this repo
+```bash
+https://github.com/Tooo/Web-Server.git
+```
 ### Single-Threaded Web Server
-2. In [webserver.py](https://github.com/Tooo/web-server/blob/main/webserver.py), 
+3. In [webserver.py](https://github.com/Tooo/web-server/blob/main/webserver.py), 
    fill in your server's host and port.
 ```python
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 8080
 ```
-3. Run webserver.py.
+4. Run webserver.py.
 ```bash
 python3 webserver.py
 ```
-4. Open the URL on your browser with your server's host and port.
+5. Open the URL on your browser with your server's host and port.
 ```bash
 <SERVER_HOST>:<SERVER_PORT>
 ```
 
 ### Multi-Threaded Web Server
-2. In [multi_webserver.py](https://github.com/Tooo/web-server/blob/main/multi_webserver.py), 
+3. In [multi_webserver.py](https://github.com/Tooo/web-server/blob/main/multi_webserver.py), 
    fill in your server's host and port.
 ```python
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 8080
 ```
-3. Run multi_webserver.py.
+4. Run multi_webserver.py.
 ```bash
 python3 multi_webserver.py
 ```
-4. Open the URL on your browser with your server's host and port.
+5. Open the URL on your browser with your server's host and port.
 ```bash
 <SERVER_HOST>:<SERVER_PORT>
 ```
